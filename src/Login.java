@@ -27,8 +27,9 @@ public class Login extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nickname = new String(Select.Login(new ConnectDB(), txtId.getText(), pfPwd.getPassword()));
+                System.out.println("Login user: " + nickname);
 
-                if (nickname.length() != 0) {
+                if (!nickname.equals(null)) {
                     MainBoard mainBoard = new MainBoard();
                     dispose();
                 }
