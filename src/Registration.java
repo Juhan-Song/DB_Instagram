@@ -10,7 +10,7 @@ import java.awt.event.*;
 public class Registration extends JFrame {
     private JTextField txtName;
     private JTextField txtId;
-    private JButton btnOk;
+    private JButton btnId;
     private JPasswordField pfPwd;
     private JPasswordField pfRePwd;
     private JTextField txtNickname;
@@ -21,10 +21,13 @@ public class Registration extends JFrame {
     private JPanel mainPanel;
     private JCheckBox ckAgree;
     private JButton btnRegist;
-    private JLabel lblOk;
+    private JLabel lblId;
     private JLabel lblRe;
+    private JButton btnNickname;
+    private JLabel lblNickname;
 
     private boolean isIdPossible = false;
+    private boolean isNicknamePossible = false;
     private boolean isSuccess = false;
 
     private void ClearForm() {
@@ -32,7 +35,7 @@ public class Registration extends JFrame {
         rdMale.setSelected(false);
         rdFemale.setSelected(false);
         txtId.setText("");
-        lblOk.setText("");
+        lblId.setText("");
         pfPwd.setText("");
         pfRePwd.setText("");
         txtNickname.setText("");
@@ -42,7 +45,7 @@ public class Registration extends JFrame {
     }
 
     Registration() {
-        btnOk.addActionListener(new ActionListener() {
+        btnId.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Check Duplicated Id...");
@@ -50,12 +53,36 @@ public class Registration extends JFrame {
                 System.out.println(isIdPossible);
 
                 if (isIdPossible == true) {
-                    lblOk.setForeground(Color.GREEN);
-                    lblOk.setText("Possible");
+                    lblId.setForeground(Color.GREEN);
+                    lblId.setText("Possible");
                 }
                 else {
-                    lblOk.setForeground(Color.RED);
-                    lblOk.setText("Impossible");
+                    lblId.setForeground(Color.RED);
+                    lblId.setText("Impossible");
+                }
+            }
+        });
+
+        btnNickname.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Check Duplicated Nickname...");
+                if (!txtNickname.getText().contains("\'") && !txtNickname.getText().contains("\"")) {
+                    isNicknamePossible = Select.isNicknamePossible(new ConnectDB(), txtNickname.getText());
+                }
+                else {
+                    isNicknamePossible = false;
+                }
+
+                System.out.println(isNicknamePossible);
+
+                if (isNicknamePossible == true) {
+                    lblNickname.setForeground(Color.GREEN);
+                    lblNickname.setText("Possible");
+                }
+                else {
+                    lblNickname.setForeground(Color.RED);
+                    lblNickname.setText("Impossible");
                 }
             }
         });
@@ -92,20 +119,20 @@ public class Registration extends JFrame {
                 String nickName = new String();
                 System.out.println("Registration...");
 
-                if (isIdPossible == true && ckAgree.isSelected() && String.valueOf(pfPwd.getPassword()).length() >= 8) {
-                    //String pwd = new String(String.valueOf(pfPwd.getPassword()));
-                    if (rdMale.isSelected() && String.valueOf(pfPwd.getPassword()).equals(String.valueOf(pfRePwd.getPassword()))) {
-                        nickName = Insert.InsertUserInfo(new ConnectDB(), txtId.getText(), pfRePwd.getPassword(),
-                            txtName.getText(), rdMale.getText(), txtNickname.getText(), txtBirth.getText(), txtPhone.getText());
-                        isSuccess = true;
-                    }
-                    else if (rdFemale.isSelected() && String.valueOf(pfPwd.getPassword()).equals(String.valueOf(pfRePwd.getPassword()))) {
-                        nickName = Insert.InsertUserInfo(new ConnectDB(), txtId.getText(), pfRePwd.getPassword(),
-                            txtName.getText(), rdFemale.getText(), txtNickname.getText(), txtBirth.getText(), txtPhone.getText());
-                        isSuccess = true;
-                    }
-                    else if (!String.valueOf(pfPwd.getPassword()).equals(String.valueOf(pfRePwd.getPassword()))) {
-                        System.out.println("Not Equal");
+                if (isIdPossible == true && isNicknamePossible == true) {
+                    if (ckAgree.isSelected() && String.valueOf(pfPwd.getPassword()).length() >= 8) {
+                        //String pwd = new String(String.valueOf(pfPwd.getPassword()));
+                        if (rdMale.isSelected() && String.valueOf(pfPwd.getPassword()).equals(String.valueOf(pfRePwd.getPassword()))) {
+                            nickName = Insert.InsertUserInfo(new ConnectDB(), txtId.getText(), pfRePwd.getPassword(),
+                                    txtName.getText(), rdMale.getText(), txtNickname.getText(), txtBirth.getText(), txtPhone.getText());
+                            isSuccess = true;
+                        } else if (rdFemale.isSelected() && String.valueOf(pfPwd.getPassword()).equals(String.valueOf(pfRePwd.getPassword()))) {
+                            nickName = Insert.InsertUserInfo(new ConnectDB(), txtId.getText(), pfRePwd.getPassword(),
+                                    txtName.getText(), rdFemale.getText(), txtNickname.getText(), txtBirth.getText(), txtPhone.getText());
+                            isSuccess = true;
+                        } else if (!String.valueOf(pfPwd.getPassword()).equals(String.valueOf(pfRePwd.getPassword()))) {
+                            System.out.println("Not Equal");
+                        }
                     }
                 }
 
