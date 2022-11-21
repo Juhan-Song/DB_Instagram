@@ -26,11 +26,11 @@ public class Login extends JFrame {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nickname = new String(Select.Login(new ConnectDB(), txtId.getText(), pfPwd.getPassword()));
-                System.out.println("Login user: " + nickname);
+                String nickName = new String(Select.Login(new ConnectDB(), txtId.getText(), pfPwd.getPassword()));
+                System.out.println("Login user: " + nickName);
 
-                if (!nickname.equals(null)) {
-                    MainBoard mainBoard = new MainBoard();
+                if (!nickName.equals(null)) {
+                    MainBoard mainBoard = new MainBoard(nickName);
                     dispose();
                 }
             }

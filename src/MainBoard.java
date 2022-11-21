@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainBoard extends JFrame {
+    private String user;
     private JPanel mainPanel;
     private JButton btnHome;
     private JButton btnSearch;
@@ -13,7 +14,8 @@ public class MainBoard extends JFrame {
     private JButton btnShop;
     private JLabel lblLogo;
 
-    MainBoard() {
+    MainBoard(String nickName) {
+        this.user = nickName;
         btnHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,7 +47,7 @@ public class MainBoard extends JFrame {
         btnUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                UserBoard userBoard = new UserBoard(user);
             }
         });
 
@@ -63,7 +65,7 @@ public class MainBoard extends JFrame {
         ImageResizer.InterfaceImage(btnGroup);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Instagram");
+        setTitle("Instagram - MainBoard");
         setVisible(true);
     }
 }

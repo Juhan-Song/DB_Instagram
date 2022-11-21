@@ -22,4 +22,21 @@ public class Update {
             e.printStackTrace();
         }
     }
+
+    public static void UpdateLogoutTime(ConnectDB connectDB, String nickname) {
+        PreparedStatement pstmt = null;
+
+        try {
+            String sql = "update userinfo set logout = NOW() where nickname = ?";
+            pstmt = connectDB.getCon().prepareStatement(sql);
+
+            pstmt.setString(1, nickname);
+
+            int count = pstmt.executeUpdate();
+
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
