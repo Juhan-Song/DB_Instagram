@@ -8,7 +8,15 @@ import java.awt.event.ActionListener;
 public class UserBoard extends JFrame {
     private String user;
     private JButton btnLogout;
-    private JPanel mainPanel;
+    private JPanel userBoard;
+
+    private boolean isLogout = false;
+    public JPanel getUserBoard() {
+        return userBoard;
+    }
+    public boolean getIsLogout() {
+        return isLogout;
+    }
 
     UserBoard(String nickName) {
         this.user = nickName;
@@ -17,15 +25,13 @@ public class UserBoard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Delete.Logout(new ConnectDB(), user);
-                dispose();
+                MainFrame.setLogout(true);
             }
         });
 
-        setContentPane(mainPanel);
-
-        setSize(400, 400);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Instagram - UserBoard");
-        setVisible(true);
+//        setSize(400, 400);
+//        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//        setTitle("Instagram - UserBoard");
+//        setVisible(true);
     }
 }

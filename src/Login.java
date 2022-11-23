@@ -1,6 +1,5 @@
 import ImageResizer.ImageResizer;
 import Query.ConnectDB;
-import Query.Create;
 import Query.Select;
 
 import javax.swing.*;
@@ -30,7 +29,7 @@ public class Login extends JFrame {
                 System.out.println("Login user: " + nickName);
 
                 if (!nickName.equals(null)) {
-                    MainBoard mainBoard = new MainBoard(nickName);
+                    MainFrame mainFrame = new MainFrame(nickName);
                     dispose();
                 }
             }
