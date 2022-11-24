@@ -1,6 +1,10 @@
 package Query;
 
+import User.User;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Select {
     public static boolean isIdPossible(ConnectDB connectDB, String id) {
@@ -91,5 +95,32 @@ public class Select {
         }
 
         return result;
+    }
+
+    public static ArrayList<User> SearchUser(Connection con, String nickName) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<User> searched = new ArrayList<User>();
+
+        try {
+            String sql = "select nickname from userinfo where nickname like ?";
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, "%" + nickName + "%");
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                User newUser = new User();
+                System.out.println(rs.getString("nickname"));
+                newUser.setNickName(rs.getString("nickname"));
+                System.out.println(newUser.getNickName());
+                searched.add(newUser);
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return searched;
     }
 }

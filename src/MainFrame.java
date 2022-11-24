@@ -16,7 +16,8 @@ public class MainFrame extends JFrame {
     private JLabel lblLogo;
     private JPanel mainPanel;
     private JPanel mainFrame;
-    private static boolean isLogout;
+    private static boolean change = false;
+    private static boolean isLogout = false;
 
     public boolean isLogout() {
         return isLogout;
