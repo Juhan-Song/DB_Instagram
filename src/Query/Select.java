@@ -97,6 +97,30 @@ public class Select {
         return result;
     }
 
+    public static int TotalUserNumber(ConnectDB connectDB) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int totalUserNumber = 0;
+
+        try {
+            String sql = "select count(id) as result from userinfo";
+            pstmt = connectDB.getCon().prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                totalUserNumber = rs.getInt("result");
+            }
+
+            rs.close();
+            pstmt.close();
+            connectDB.Disconnect();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalUserNumber;
+    }
+
     public static ArrayList<User> SearchUser(Connection con, String nickName) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;

@@ -1,22 +1,55 @@
 import ImageResizer.ImageResizer;
+import Query.ConnectDB;
+import Query.Select;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements Runnable {
+    public static int totalUserNumber;
     private String user;
-    private JPanel mainBoard;
-    private JPanel userBoard;
     private JButton btnHome;
     private JButton btnSearch;
     private JButton btnVideo;
     private JButton btnUser;
     private JButton btnShop;
     private JLabel lblLogo;
-    private JPanel mainPanel;
+    public JPanel mainPanel;
+    private static JPanel target;
+
+    public static JPanel getTarget() {
+        return target;
+    }
+
+    public void setTarget(JPanel target) {
+        this.target = target;
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    public void setMainPanel(JPanel main) {
+        mainPanel.removeAll();
+        System.out.println("BBBB");
+        mainPanel.add(main);
+        System.out.println("AAAA");
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
     private JPanel mainFrame;
-    private static boolean change = false;
+    private static boolean isChange = false;
+
+    public static boolean getIsChange() {
+        return isChange;
+    }
+
+    public static void setIsChange(boolean isChange) {
+        MainFrame.isChange = isChange;
+    }
+
     private static boolean isLogout = false;
 
     public boolean isLogout() {
@@ -29,6 +62,7 @@ public class MainFrame extends JFrame {
 
     MainFrame(String nickName) {
         this.user = nickName;
+        totalUserNumber = Select.TotalUserNumber(new ConnectDB());
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -62,6 +96,7 @@ public class MainFrame extends JFrame {
                 mainPanel.add(new SearchBoard().getSearchBoard());
                 mainPanel.revalidate();
                 mainPanel.repaint();
+                target = mainPanel;
             }
         });
 
@@ -107,5 +142,15 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Instagram - MainBoard");
         setVisible(true);
+    }
+
+    public void run() {
+//        while (isChange == false) {
+//            if (isChange == true) break;
+//        }
+//        isChange = false;
+//        mainPanel = target;
+//        mainPanel.revalidate();
+//        mainPanel.repaint();
     }
 }
