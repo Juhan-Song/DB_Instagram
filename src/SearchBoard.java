@@ -3,13 +3,11 @@ import Query.Select;
 import User.User;
 
 import javax.swing.*;
-import javax.swing.text.TextAction;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class SearchBoard extends JFrame {
     private Connection con;

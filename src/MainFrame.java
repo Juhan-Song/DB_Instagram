@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MainFrame extends JFrame implements Runnable {
+public class MainFrame extends JFrame {
     public static int totalUserNumber;
     private String user;
     private JButton btnHome;
@@ -142,15 +142,5 @@ public class MainFrame extends JFrame implements Runnable {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Instagram - MainBoard");
         setVisible(true);
-    }
-
-    public void run() {
-//        while (isChange == false) {
-//            if (isChange == true) break;
-//        }
-//        isChange = false;
-//        mainPanel = target;
-//        mainPanel.revalidate();
-//        mainPanel.repaint();
     }
 }
