@@ -1,7 +1,6 @@
 import Query.ConnectDB;
 import Query.Select;
 import User.User;
-import User.searchbb;
 
 import javax.swing.*;
 import javax.swing.text.TextAction;
