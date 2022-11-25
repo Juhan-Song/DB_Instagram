@@ -1,6 +1,7 @@
 import Query.ConnectDB;
 import Query.Select;
 import User.User;
+import User.searchbb;
 
 import javax.swing.*;
 import javax.swing.text.TextAction;
@@ -16,14 +17,18 @@ public class SearchBoard extends JFrame {
     private JPanel searchBoard;
     private JTextField txtSearch;
     private JScrollPane scrSearch;
+    private JPanel container;
+    private ArrayList<User> searched;
 
     public JPanel getSearchBoard() {
         return searchBoard;
     }
 
     SearchBoard() {
-        scrSearch.setLayout(new GridLayout());
-        //scrSearch.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        searched = new ArrayList<User>();
+        container.setLayout(new GridLayout(100, 1));
+
+        scrSearch.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         txtSearch.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -41,63 +46,67 @@ public class SearchBoard extends JFrame {
             }
         });
 
-        txtSearch.addKeyListener(new KeyAdapter() {
+        txtSearch.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                return;
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                return;
+            }
+
             @Override
             public void keyReleased(KeyEvent e) {
-                scrSearch.removeAll();
+                //searchBoard.remove(scrSearch);
+                container.removeAll();
+                //scrSearch.revalidate();
+                //scrSearch.repaint();
+                scrSearch.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
                 String nickName = txtSearch.getText();
-                ArrayList<User> searched = new ArrayList<User>();
 
                 searched = Select.SearchUser(con, nickName);
                 System.out.println(nickName);
 
-                for (int i = 0; i < searched.size(); i++) {
-                    JButton btn = new JButton();
-                    btn.setText(searched.get(i).getNickName());
-                    System.out.println(searched.get(i).getNickName());
-                    scrSearch.add(btn);
+                //container = new JPanel(new GridLayout(100, 1));
+                //container.setBackground(Color.RED);
 
+                for (int i = 0; i < searched.size(); i++) {
+                    JLabel lbl = new JLabel();
+                    lbl.setText(searched.get(i).getNickName());
+                    lbl.setSize(180,60);
+                    container.add(lbl);
+                    System.out.println(searched.get(i).getNickName());
                 }
+
+//                for (int i = 0; i < searched.size(); i++) {
+//                    container.add(lblGroup.get(i));
+//                }
+
+
+                //scrSearch.add(container);
+
+                //scrSearch.revalidate();
+                //scrSearch.repaint();
+
+                System.out.println("1");
+                MainFrame.getTarget().removeAll();
+                System.out.println("2");
+                MainFrame.getTarget().add(searchBoard);
+                System.out.println("3");
+                txtSearch.requestFocus();
+//                MainFrame.getTarget().revalidate();
+//                MainFrame.getTarget().repaint();
+//                MainFrame.setIsChange(true);
             }
         });
-    }
 
-//    public class TestPane extends JPanel implements Scrollable {
-//        public TestPane(ArrayList<User> searched) {
-//            setLayout(new GridBagLayout());
-//            GridBagConstraints gbc = new GridBagConstraints();
-//            gbc.gridx = 0;
-//            gbc.gridy = 0;
-//
-//            for (int index = 0; index < searched.size(); index++) {
-//                add(new JLabel(searched.get(index).getNickName()), gbc);
-//                gbc.gridy++;
-//            }
-//        }
-//
-//        @Override
-//        public Dimension getPreferredScrollableViewportSize() {
-//            return new Dimension(100, 50);
-//        }
-//
-//        @Override
-//        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-//            return 32;
-//        }
-//
-//        @Override
-//        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-//            return 32;
-//        }
-//
-//        @Override
-//        public boolean getScrollableTracksViewportWidth() {
-//            return getPreferredSize().width <= getWidth();
-//        }
-//
-//        @Override
-//        public boolean getScrollableTracksViewportHeight() {
-//            return false;
-//        }
-//    }
+//        setTitle("Search-Board");
+//        setSize(400, 400);
+//        setContentPane(searchBoard);
+//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        setVisible(true);
+    }
 }
