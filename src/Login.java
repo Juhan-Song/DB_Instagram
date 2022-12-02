@@ -28,7 +28,7 @@ public class Login extends JFrame {
                 String nickName = new String(Select.Login(new ConnectDB(), txtId.getText(), pfPwd.getPassword()));
                 System.out.println("Login user: " + nickName);
 
-                if (!nickName.equals(null)) {
+                if (!nickName.equals("")) {
                     MainFrame mainFrame = new MainFrame(nickName);
                     dispose();
                 }

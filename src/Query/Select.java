@@ -97,14 +97,14 @@ public class Select {
         return result;
     }
 
-    public static int TotalUserNumber(ConnectDB connectDB) {
+    public static int TotalUserNumber(Connection con) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         int totalUserNumber = 0;
 
         try {
             String sql = "select count(id) as result from userinfo";
-            pstmt = connectDB.getCon().prepareStatement(sql);
+            pstmt = con.prepareStatement(sql);
 
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -113,7 +113,6 @@ public class Select {
 
             rs.close();
             pstmt.close();
-            connectDB.Disconnect();
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -127,10 +126,11 @@ public class Select {
         ArrayList<User> searched = new ArrayList<User>();
 
         try {
-            String sql = "select nickname from userinfo where nickname like ?";
+            String sql = "select nickname from userinfo where nickname like ? and nickname != ?";
             pstmt = con.prepareStatement(sql);
 
             pstmt.setString(1, "%" + nickName + "%");
+            pstmt.setString(2, nickName);
 
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -146,5 +146,109 @@ public class Select {
         }
 
         return searched;
+    }
+
+    public static int CountFollower(Connection con, String nickName) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int follower = 0;
+
+        try {
+            String sql = "select count(follower) as result from " + nickName + " where follower = true";
+            pstmt = con.prepareStatement(sql);
+
+            //pstmt.setString(1, nickName);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                follower = rs.getInt("result");
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return follower;
+    }
+
+    public static int CountFollowing(Connection con, String nickName) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int following = 0;
+
+        try {
+            String sql = "select count(following) as result from " + nickName + " where following = true";
+            pstmt = con.prepareStatement(sql);
+
+            //pstmt.setString(1, nickName);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                following = rs.getInt("result");
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return following;
+    }
+
+    public static boolean isFollowExist(Connection con, String user, String otherUser) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String searched = new String("");
+        boolean isExist = false;
+
+        try {
+            String sql = "select nickname from " + user + " where nickname = ?";
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, otherUser);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                searched = rs.getString("nickname");
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (searched.equals(otherUser)) isExist = true;
+        else isExist = false;
+
+        return isExist;
+    }
+
+    public static boolean isFollowing(Connection con, String user, String otherUser) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        boolean isFollowing = false;
+
+        try {
+            String sql = "select following from " + user + " where nickname = ?";
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, otherUser);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                isFollowing = rs.getBoolean("following");
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isFollowing;
     }
 }

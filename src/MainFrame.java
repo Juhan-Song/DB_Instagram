@@ -5,15 +5,15 @@ import Query.Select;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 
 public class MainFrame extends JFrame {
     public static int totalUserNumber;
     private String user;
     private JButton btnHome;
     private JButton btnSearch;
-    private JButton btnVideo;
     private JButton btnUser;
-    private JButton btnShop;
+    private JButton btnRefresh;
     private JLabel lblLogo;
     public JPanel mainPanel;
     private static JPanel target;
@@ -30,16 +30,12 @@ public class MainFrame extends JFrame {
         return mainPanel;
     }
 
-    public void setMainPanel(JPanel main) {
-        mainPanel.removeAll();
-        System.out.println("BBBB");
-        mainPanel.add(main);
-        System.out.println("AAAA");
-        mainPanel.revalidate();
-        mainPanel.repaint();
-    }
-
     private JPanel mainFrame;
+    private JLabel lblUser;
+    private JLabel lblFollower;
+    private JLabel lblFollowing;
+    private JButton btnFollower;
+    private JButton btnFollowing;
     private static boolean isChange = false;
 
     public static boolean getIsChange() {
@@ -60,14 +56,31 @@ public class MainFrame extends JFrame {
         isLogout = logout;
     }
 
+    public void Dispose() {
+        dispose();
+    }
+
     MainFrame(String nickName) {
-        this.user = nickName;
-        totalUserNumber = Select.TotalUserNumber(new ConnectDB());
+        this.user = new String(nickName);
+        lblUser.setText(user);
+
+        try {
+            ConnectDB con = new ConnectDB();
+
+            totalUserNumber = Select.TotalUserNumber(con.getCon());
+            lblFollower.setText(String.valueOf(Select.CountFollower(con.getCon(), user)));
+            lblFollowing.setText(String.valueOf(Select.CountFollowing(con.getCon(), user)));
+
+            con.Disconnect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (isLogout == true) {
+                    isLogout = false;
                     dispose();
                 }
             }
@@ -75,10 +88,26 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseExited(MouseEvent e) {
                 if (isLogout == true) {
+                    isLogout = false;
                     dispose();
                 }
             }
         });
+
+        btnFollower.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        btnFollowing.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         btnHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -93,24 +122,26 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainPanel.removeAll();
-                mainPanel.add(new SearchBoard().getSearchBoard());
+                mainPanel.add(new SearchBoard(user).getSearchBoard());
                 mainPanel.revalidate();
                 mainPanel.repaint();
                 target = mainPanel;
             }
         });
 
-        btnVideo.addActionListener(new ActionListener() {
+        btnRefresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    ConnectDB con = new ConnectDB();
 
-            }
-        });
+                    lblFollower.setText(String.valueOf(Select.CountFollower(con.getCon(), user)));
+                    lblFollowing.setText(String.valueOf(Select.CountFollowing(con.getCon(), user)));
 
-        btnShop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
+                    con.Disconnect();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -124,12 +155,11 @@ public class MainFrame extends JFrame {
             }
         });
 
-        JButton[] btnGroup = new JButton[5];
+        JButton[] btnGroup = new JButton[4];
         btnGroup[0] = btnHome;
         btnGroup[1] = btnSearch;
-        btnGroup[2] = btnVideo;
-        btnGroup[3] = btnShop;
-        btnGroup[4] = btnUser;
+        btnGroup[2] = btnRefresh;
+        btnGroup[3] = btnUser;
 
         setContentPane(mainFrame);
         mainPanel.setLayout(new GridLayout(1, 1));

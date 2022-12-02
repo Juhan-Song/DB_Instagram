@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SearchBoard extends JFrame {
+    private String user;
     private Connection con;
     private JPanel searchBoard;
     private JTextField txtSearch;
@@ -21,9 +22,11 @@ public class SearchBoard extends JFrame {
         return searchBoard;
     }
 
-    SearchBoard() {
+    SearchBoard(String user) {
+        this.user = new String(user);
+
         searched = new ArrayList<User>();
-        container.setLayout(new GridLayout(100, 1));
+        container.setLayout(new GridLayout(1000, 1));
 
         scrSearch.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         txtSearch.addFocusListener(new FocusListener() {
@@ -56,10 +59,8 @@ public class SearchBoard extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                //searchBoard.remove(scrSearch);
                 container.removeAll();
-                //scrSearch.revalidate();
-                //scrSearch.repaint();
+
                 scrSearch.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
                 String nickName = txtSearch.getText();
@@ -67,43 +68,24 @@ public class SearchBoard extends JFrame {
                 searched = Select.SearchUser(con, nickName);
                 System.out.println(nickName);
 
-                //container = new JPanel(new GridLayout(100, 1));
-                //container.setBackground(Color.RED);
-
                 for (int i = 0; i < searched.size(); i++) {
                     JLabel lbl = new JLabel();
                     lbl.setText(searched.get(i).getNickName());
-                    lbl.setSize(180,60);
+                    lbl.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            OthersBoard other = new OthersBoard(user, lbl.getText());
+                        }
+                    });
+
                     container.add(lbl);
                     System.out.println(searched.get(i).getNickName());
                 }
 
-//                for (int i = 0; i < searched.size(); i++) {
-//                    container.add(lblGroup.get(i));
-//                }
-
-
-                //scrSearch.add(container);
-
-                //scrSearch.revalidate();
-                //scrSearch.repaint();
-
-                System.out.println("1");
                 MainFrame.getTarget().removeAll();
-                System.out.println("2");
                 MainFrame.getTarget().add(searchBoard);
-                System.out.println("3");
                 txtSearch.requestFocus();
-//                MainFrame.getTarget().revalidate();
-//                MainFrame.getTarget().repaint();
-//                MainFrame.setIsChange(true);
             }
         });
-
-//        setTitle("Search-Board");
-//        setSize(400, 400);
-//        setContentPane(searchBoard);
-//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        setVisible(true);
     }
 }

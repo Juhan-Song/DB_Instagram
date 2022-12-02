@@ -7,16 +7,11 @@ public class Create {
         PreparedStatement pstmt = null;
 
         try {
-            String sql = "CREATE TABLE instagram." + nickName + "(" +
-                        "follower VARCHAR(30) NULL DEFAULT NULL, " +
-                        "following VARCHAR(30) NULL DEFAULT NULL, " +
-                        "UNIQUE INDEX follower_UNIQUE (follower ASC) VISIBLE, " +
-                        "UNIQUE INDEX following_UNIQUE (following ASC) VISIBLE)";
-//            String sql = "create table " + nickName + "(" +
-//                    "follower varchar(30) null default null, " +
-//                    "following varchar(30) null default null, " +
-//                    "unique index follower_unique (follower asc) visible, " +
-//                    "unique index following_unique (follower asc) visible)";
+            String sql = "CREATE TABLE instagram." + nickName + " (" +
+                        "nickname VARCHAR(30) NOT NULL, " +
+                        "follower TINYINT NOT NULL DEFAULT 0, " +
+                        "following TINYINT NOT NULL DEFAULT 0, " +
+                        "UNIQUE INDEX nickname_UNIQUE (nickname ASC))";
             pstmt = connectDB.getCon().prepareStatement(sql);
 
             int count = pstmt.executeUpdate();

@@ -19,7 +19,7 @@ public class UserBoard extends JFrame {
     }
 
     UserBoard(String nickName) {
-        this.user = nickName;
+        this.user = new String(nickName);
 
         btnLogout.addActionListener(new ActionListener() {
             @Override
@@ -28,10 +28,5 @@ public class UserBoard extends JFrame {
                 MainFrame.setLogout(true);
             }
         });
-
-//        setSize(400, 400);
-//        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-//        setTitle("Instagram - UserBoard");
-//        setVisible(true);
     }
 }

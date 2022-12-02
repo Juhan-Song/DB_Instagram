@@ -54,4 +54,40 @@ public class Insert {
             e.printStackTrace();
         }
     }
+
+    public static void InsertFollow(Connection con, String user, String otherUser) {
+        PreparedStatement pstmt = null;
+
+        try {
+            String sql = "insert into " + user + " values (?, ?, ?)";
+            pstmt = con.prepareStatement(sql);
+
+            //pstmt.setString(1, user);
+            pstmt.setString(1, otherUser);
+            pstmt.setBoolean(2, false);
+            pstmt.setBoolean(3, true);
+
+            int count = pstmt.executeUpdate();
+
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String sql = "insert into " + otherUser + " values (?, ?, ?)";
+            pstmt = con.prepareStatement(sql);
+
+            //pstmt.setString(1, otherUser);
+            pstmt.setString(1, user);
+            pstmt.setBoolean(2, true);
+            pstmt.setBoolean(3, false);
+
+            int count = pstmt.executeUpdate();
+
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
