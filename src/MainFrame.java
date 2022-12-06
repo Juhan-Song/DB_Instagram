@@ -56,10 +56,6 @@ public class MainFrame extends JFrame {
         isLogout = logout;
     }
 
-    public void Dispose() {
-        dispose();
-    }
-
     MainFrame(String nickName) {
         this.user = new String(nickName);
         lblUser.setText(user);
@@ -97,14 +93,14 @@ public class MainFrame extends JFrame {
         btnFollower.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Follow follower = new Follow(user, btnFollower.getText());
             }
         });
 
         btnFollowing.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Follow following = new Follow(user, btnFollowing.getText());
             }
         });
 
@@ -112,7 +108,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainPanel.removeAll();
-                mainPanel.add(new MainBoard().getMainBoard());
+                mainPanel.add(new MainBoard(user).getMainBoard());
                 mainPanel.revalidate();
                 mainPanel.repaint();
             }
@@ -163,7 +159,7 @@ public class MainFrame extends JFrame {
 
         setContentPane(mainFrame);
         mainPanel.setLayout(new GridLayout(1, 1));
-        mainPanel.add(new MainBoard().getMainBoard());
+        mainPanel.add(new MainBoard(user).getMainBoard());
 
         setSize(400, 500);
         ImageResizer.MainBoardImage(lblLogo);

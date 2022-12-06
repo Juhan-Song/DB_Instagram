@@ -1,11 +1,11 @@
 package User;
 
 public class User {
-    String name;
-    String gender;
-    String nickName;
-    String birth;
-    String phone;
+    private String name;
+    private String gender;
+    private String nickName;
+    private String birth;
+    private String phone;
 
     public String getName() { return name; }
 

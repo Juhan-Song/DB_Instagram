@@ -65,7 +65,7 @@ public class SearchBoard extends JFrame {
 
                 String nickName = txtSearch.getText();
 
-                searched = Select.SearchUser(con, nickName);
+                searched = Select.SearchUser(con, user, nickName);
                 System.out.println(nickName);
 
                 for (int i = 0; i < searched.size(); i++) {

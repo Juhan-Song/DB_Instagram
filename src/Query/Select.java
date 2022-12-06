@@ -1,6 +1,7 @@
 package Query;
 
 import User.User;
+import User.Messages;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -120,7 +121,7 @@ public class Select {
         return totalUserNumber;
     }
 
-    public static ArrayList<User> SearchUser(Connection con, String nickName) {
+    public static ArrayList<User> SearchUser(Connection con, String user, String nickName) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         ArrayList<User> searched = new ArrayList<User>();
@@ -130,7 +131,7 @@ public class Select {
             pstmt = con.prepareStatement(sql);
 
             pstmt.setString(1, "%" + nickName + "%");
-            pstmt.setString(2, nickName);
+            pstmt.setString(2, user);
 
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -250,5 +251,110 @@ public class Select {
         }
 
         return isFollowing;
+    }
+
+    public static ArrayList<User> SelectFollower(Connection con, String user) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<User> follower = new ArrayList<User>();
+
+        try {
+            String sql = "select nickname from " + user + " where follower = true";
+            pstmt = con.prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                User newUser = new User();
+                newUser.setNickName(rs.getString("nickname"));
+                follower.add(newUser);
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return follower;
+    }
+
+    public static ArrayList<User> SelectFollowing(Connection con, String user) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<User> following = new ArrayList<User>();
+
+        try {
+            String sql = "select nickname from " + user + " where following = true";
+            pstmt = con.prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                User newUser = new User();
+                newUser.setNickName(rs.getString("nickname"));
+                following.add(newUser);
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return following;
+    }
+
+    public static ArrayList<Messages> SelectAllMessages(Connection con) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<Messages> messages = new ArrayList<Messages>();
+
+        try {
+            String sql = "select who, user, text from mainboard order by upload";
+            pstmt = con.prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Messages msgs = new Messages();
+                msgs.setFrom(rs.getString("who"));
+                msgs.setTo(rs.getString("user"));
+                msgs.setMessage(rs.getString("text"));
+                messages.add(msgs);
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
+    }
+
+    public static ArrayList<Messages> SelectUserMessages(Connection con, String user) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<Messages> messages = new ArrayList<Messages>();
+
+        try {
+            String sql = "select who, text from mainboard where user = ? order by upload";
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, user);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Messages msgs = new Messages();
+                msgs.setFrom(rs.getString("who"));
+                msgs.setMessage(rs.getString("text"));
+                messages.add(msgs);
+            }
+
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
     }
 }

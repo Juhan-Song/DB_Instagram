@@ -1,10 +1,13 @@
+import ImageResizer.ImageResizer;
 import Query.*;
+import User.Messages;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OthersBoard extends JFrame {
     private String user;
@@ -17,17 +20,27 @@ public class OthersBoard extends JFrame {
     private JLabel lblOther;
     private JScrollPane scrOther;
     private JButton btnFollow;
+    private JLabel lblLogo;
+    private JTextField txtText;
+    private JButton btnEnter;
+    private JPanel container;
+    private ArrayList<Messages> messages;
 
     OthersBoard(String user, String nickName) {
         this.user = new String(user);
         this.otherUser = new String(nickName);
+
         lblOther.setText(otherUser);
+        messages = new ArrayList<Messages>();
+        container.setLayout(new GridLayout(1000, 1));
+        scrOther.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         try {
             ConnectDB con = new ConnectDB();
 
             lblFollower.setText(String.valueOf(Select.CountFollower(con.getCon(), otherUser)));
             lblFollowing.setText(String.valueOf(Select.CountFollowing(con.getCon(), otherUser)));
+
             boolean isFollowing = Select.isFollowing(con.getCon(), user, otherUser);
             if (isFollowing == true) {
                 btnFollow.setBackground(Color.WHITE);
@@ -38,6 +51,23 @@ public class OthersBoard extends JFrame {
                 btnFollow.setBackground(Color.BLUE);
                 btnFollow.setForeground(Color.WHITE);
                 btnFollow.setText("Follow");
+            }
+
+            txtText.setText("");
+
+            messages = Select.SelectUserMessages(con.getCon(), otherUser);
+            for (int i = 0; i < messages.size(); i++) {
+                JLabel lbl = new JLabel();
+                if (messages.get(i).getFrom().equals(otherUser)) {
+                    lbl.setText(messages.get(i).getFrom() + ": " + messages.get(i).getMessage());
+                    lbl.setHorizontalAlignment(JLabel.RIGHT);
+                }
+                else {
+                    lbl.setText(messages.get(i).getFrom() + ": " + messages.get(i).getMessage());
+                    lbl.setHorizontalAlignment(JLabel.LEFT);
+                }
+
+                container.add(lbl);
             }
 
             con.Disconnect();
@@ -88,8 +118,60 @@ public class OthersBoard extends JFrame {
             }
         });
 
+        btnFollower.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Follow follower = new Follow(otherUser, btnFollower.getText());
+            }
+        });
+
+        btnFollowing.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Follow following = new Follow(otherUser, btnFollowing.getText());
+            }
+        });
+
+        btnEnter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!txtText.getText().equals("")) {
+                    container.removeAll();
+                    scrOther.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+                    try {
+                        ConnectDB connectDB = new ConnectDB();
+
+                        Insert.UploadMessage(connectDB.getCon(), user, otherUser, txtText.getText());
+                        txtText.setText("");
+
+                        messages = Select.SelectUserMessages(connectDB.getCon(), otherUser);
+                        for (int i = 0; i < messages.size(); i++) {
+                            JLabel lbl = new JLabel();
+                            if (messages.get(i).getFrom().equals(otherUser)) {
+                                lbl.setText(messages.get(i).getFrom() + ": " + messages.get(i).getMessage());
+                                lbl.setHorizontalAlignment(JLabel.RIGHT);
+                            }
+                            else {
+                                lbl.setText(messages.get(i).getFrom() + ": " + messages.get(i).getMessage());
+                                lbl.setHorizontalAlignment(JLabel.LEFT);
+                            }
+
+                            container.add(lbl);
+                        }
+
+                        connectDB.Disconnect();
+                    } catch(SQLException e3) {
+                        e3.printStackTrace();
+                    }
+                }
+            }
+        });
+
         setContentPane(othersBoard);
+
         setSize(400, 500);
+        ImageResizer.MainBoardImage(lblLogo);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(otherUser);

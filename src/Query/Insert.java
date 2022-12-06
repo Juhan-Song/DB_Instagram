@@ -90,4 +90,23 @@ public class Insert {
             e.printStackTrace();
         }
     }
+
+    public static void UploadMessage(Connection con, String from, String to, String text) {
+        PreparedStatement pstmt = null;
+
+        try {
+            String sql = "insert into mainboard values (?, ?, ?, NOW())";
+            pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, from);
+            pstmt.setString(2, to);
+            pstmt.setString(3, text);
+
+            int count = pstmt.executeUpdate();
+
+            pstmt.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
