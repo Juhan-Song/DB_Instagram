@@ -1,3 +1,4 @@
+import ImageResizer.ImageResizer;
 import Query.ConnectDB;
 import Query.Delete;
 import Query.Insert;
@@ -19,6 +20,8 @@ public class UserBoard extends JFrame {
     private JButton btnEnter;
     private JScrollPane scrUser;
     private JPanel container;
+    private JButton btnPwd;
+    private JLabel lblSetting;
     private ArrayList<Messages> messages;
 
     private boolean isLogout = false;
@@ -103,5 +106,7 @@ public class UserBoard extends JFrame {
                 }
             }
         });
+
+        ImageResizer.UserBoardSetting(lblSetting);
     }
 }

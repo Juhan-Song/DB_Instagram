@@ -36,4 +36,14 @@ public class ImageResizer {
             btn.setIcon(newIcon);
         }
     }
+
+    public static void UserBoardSetting(JLabel lblSetting) {
+        ImageIcon icon = (ImageIcon)lblSetting.getIcon();
+        Image image = icon.getImage();
+
+        Image newImage = image.getScaledInstance(25,25, Image.SCALE_SMOOTH);
+        ImageIcon newIcon = new ImageIcon(newImage);
+
+        lblSetting.setIcon(newIcon);
+    }
 }

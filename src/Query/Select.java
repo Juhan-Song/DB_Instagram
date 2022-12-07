@@ -309,7 +309,7 @@ public class Select {
         ArrayList<Messages> messages = new ArrayList<Messages>();
 
         try {
-            String sql = "select who, user, text from mainboard order by upload";
+            String sql = "select who, user, text from mainboard order by upload desc";
             pstmt = con.prepareStatement(sql);
 
             rs = pstmt.executeQuery();
@@ -336,7 +336,7 @@ public class Select {
         ArrayList<Messages> messages = new ArrayList<Messages>();
 
         try {
-            String sql = "select who, text from mainboard where user = ? order by upload";
+            String sql = "select who, text from mainboard where user = ? order by upload desc";
             pstmt = con.prepareStatement(sql);
 
             pstmt.setString(1, user);
