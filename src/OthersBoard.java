@@ -58,7 +58,7 @@ public class OthersBoard extends JFrame {
             messages = Select.SelectUserMessages(con.getCon(), otherUser);
             for (int i = 0; i < messages.size(); i++) {
                 JLabel lbl = new JLabel();
-                if (messages.get(i).getFrom().equals(otherUser)) {
+                if (messages.get(i).getFrom().equals(user)) {
                     lbl.setText(messages.get(i).getFrom() + ": " + messages.get(i).getMessage());
                     lbl.setHorizontalAlignment(JLabel.RIGHT);
                 }
@@ -148,7 +148,7 @@ public class OthersBoard extends JFrame {
                         messages = Select.SelectUserMessages(connectDB.getCon(), otherUser);
                         for (int i = 0; i < messages.size(); i++) {
                             JLabel lbl = new JLabel();
-                            if (messages.get(i).getFrom().equals(otherUser)) {
+                            if (messages.get(i).getFrom().equals(user)) {
                                 lbl.setText(messages.get(i).getFrom() + ": " + messages.get(i).getMessage());
                                 lbl.setHorizontalAlignment(JLabel.RIGHT);
                             }

@@ -166,7 +166,7 @@ public class MainFrame extends JFrame {
         ImageResizer.InterfaceImage(btnGroup);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Instagram - MainBoard");
+        setTitle("Instagram - " + user);
         setVisible(true);
     }
 }
